@@ -42,7 +42,6 @@ endgenerate
 
 assign gt = |gt_bit;
 assign lt = |lt_bit;
-assign eq = &eq_bit;
-// Âîò òóò îïèñûâàåì ñâîé êîìïàðàòîð  
+assign eq = &eq_bit; 
     
 endmodule
