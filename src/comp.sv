@@ -8,7 +8,41 @@ module comp(
     output logic lt
     );
     
-// TODO
-// Вот тут описываем свой компаратор  
+logic [31:0] eq_bit;
+logic [31:0] prefix_eq;
+logic [31:0] gt_bit;
+logic [31:0] lt_bit;
+
+genvar i;
+
+generate
+    for(i = 0; i < 32; i++) begin
+        assign eq_bit[i] = ~(a[i] ^ b[i]);
+    end
+endgenerate
+
+assign prefix_eq[31] = 1'b1;
+
+generate
+    for(i = 30; i >= 0; i--) begin
+        assign prefix_eq[i] =
+            prefix_eq[i+1] & eq_bit[i+1];
+    end
+endgenerate
+
+generate
+    for(i = 0; i < 32; i++) begin
+        assign gt_bit[i] =
+            prefix_eq[i] & a[i] & ~b[i];
+
+        assign lt_bit[i] =
+            prefix_eq[i] & ~a[i] & b[i];
+    end
+endgenerate
+
+assign gt = |gt_bit;
+assign lt = |lt_bit;
+assign eq = &eq_bit;
+// Г‚Г®ГІ ГІГіГІ Г®ГЇГЁГ±Г»ГўГ ГҐГ¬ Г±ГўГ®Г© ГЄГ®Г¬ГЇГ Г°Г ГІГ®Г°  
     
 endmodule
